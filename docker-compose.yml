@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - 5432:5432
+    volumes:                                                                                                                                                                                   
+      - rinha-24-q1-volume:/var/lib/postgresql/data
+
+volumes:
+  rinha-24-q1-volume:
+    external: false
