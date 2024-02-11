@@ -93,7 +93,8 @@ RSpec.describe "Transacoes", type: :request do
       it "invalid transaction kind" do
         post "/clientes/1/transacoes", params: {
           "valor": 1000,
-          "tipo": "r"
+          "tipo": "x",
+          "descricao": "devolve"
         }.to_json
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -102,6 +103,24 @@ RSpec.describe "Transacoes", type: :request do
         post "/clientes/1/transacoes", params: {
           "valor": 1000,
           "tipo": "d"
+        }.to_json
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "decimal amount" do
+        post "/clientes/1/transacoes", params: {
+          "valor": 1.2,
+          "tipo": "d",
+          "descricao": "devolve"
+        }.to_json
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it "blank description" do
+        post "/clientes/1/transacoes", params: {
+          "valor": 1000,
+          "tipo": "d",
+          "descricao": ""
         }.to_json
         expect(response).to have_http_status(:unprocessable_entity)
       end

@@ -49,15 +49,14 @@ class ClientesController < ApplicationController
   end
 
   def build_transaction_result
-    @new_customer = Transaction.create(
+    @new_customer = Transaction.create!(
       customer_id: params[:id],
       customer_limit_cents: @customer.customer_limit_cents,
       customer_balance_cents: @new_customer_balance_cents,
       amount: params[:valor],
-      kind: @kind,
+      kind: params[:tipo],
       description: params[:descricao],
     )
-
     {
       "limite": @new_customer.customer_limit_cents,
       "saldo": @new_customer.customer_balance_cents
@@ -67,10 +66,8 @@ class ClientesController < ApplicationController
   def build_new_customer_balance_cents
     if params[:tipo] == "c"
       @new_customer_balance_cents = @customer.customer_balance_cents + params[:valor]
-      @kind = 1
     else
       @new_customer_balance_cents = @customer.customer_balance_cents - params[:valor]
-      @kind = 2
     end
   end
 
