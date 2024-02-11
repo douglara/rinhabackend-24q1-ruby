@@ -30,7 +30,7 @@ module Rinha24Q1
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w(assets tasks))
 
-    config.middleware.insert_before(ActionDispatch::Static,ConsiderAllRequestJsonMiddleware)
+    config.middleware.insert_before(ActionDispatch::Static,Middleware::ConsiderAllRequestJsonMiddleware)
 
     # Configuration for the application, engines, and railties goes here.
     #
