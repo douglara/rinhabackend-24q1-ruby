@@ -2,6 +2,8 @@
 
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
+  sleep $STARTUP_DELAY
+  ./bin/rails db:drop
   ./bin/rails db:prepare
 fi
 

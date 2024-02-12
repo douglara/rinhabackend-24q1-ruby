@@ -1,0 +1,71 @@
+version: '3.7'
+
+services:
+  api01: &api
+    build: .
+    hostname: api01
+    environment:
+      - WEB_CONCURRENCY=2
+      - RAILS_MAX_THREADS=30
+      - RUBY_YJIT_ENABLE=1
+      - DATABASE_URL=postgres://postgres:password@localhost/
+      - SECRET_KEY_BASE=dummy
+      - PORT=8081
+      - DISABLE_DATABASE_ENVIRONMENT_CHECK=1
+      - STARTUP_DELAY=5
+    depends_on:
+      - postgres
+    network_mode: host
+  api02:
+    <<: *api
+    hostname: api02
+    environment:
+      - WEB_CONCURRENCY=2
+      - RAILS_MAX_THREADS=30
+      - RUBY_YJIT_ENABLE=1
+      - DATABASE_URL=postgres://postgres:password@localhost/
+      - SECRET_KEY_BASE=dummy
+      - PORT=8082
+      - DISABLE_DATABASE_ENVIRONMENT_CHECK=1
+      - STARTUP_DELAY=10
+  nginx:
+    image: nginx:1.25.3-alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api01
+      - api02
+    network_mode: host
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: "0.17"
+    #       memory: "10MB"
+
+  postgres:
+    image: postgres:16-alpine
+    command: 'postgres -c max_connections=1000 -c shared_buffers=128MB -c synchronous_commit=off -c fsync=off -c full_page_writes=off'
+    # command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    # volumes:                                                                                                                                                                                   
+    #   - ./postgresql.conf:/etc/postgresql/postgresql.conf
+    network_mode: host
+    healthcheck:
+      test: ["CMD", "pg_isready", "--username", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.5'
+    #       memory: '256MB'
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    network_mode: host
