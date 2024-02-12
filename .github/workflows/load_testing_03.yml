@@ -2,6 +2,7 @@ name: Load testing 3
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   test:
