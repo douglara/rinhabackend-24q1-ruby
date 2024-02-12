@@ -64,8 +64,8 @@ services:
     #       cpus: '0.5'
     #       memory: '256MB'
 
-  portainer:
-    image: portainer/portainer-ce:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    network_mode: host
+  # portainer:
+  #   image: portainer/portainer-ce:latest
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   network_mode: host
