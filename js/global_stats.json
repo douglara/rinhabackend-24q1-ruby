@@ -8,42 +8,42 @@
     "minResponseTime": {
         "total": 1,
         "ok": 1,
-        "ko": 14
+        "ko": 5
     },
     "maxResponseTime": {
-        "total": 355,
-        "ok": 355,
-        "ko": 27
+        "total": 350,
+        "ok": 350,
+        "ko": 22
     },
     "meanResponseTime": {
-        "total": 3,
-        "ok": 3,
-        "ko": 19
+        "total": 2,
+        "ok": 2,
+        "ko": 13
     },
     "standardDeviation": {
         "total": 6,
         "ok": 6,
-        "ko": 6
+        "ko": 7
     },
     "percentiles1": {
         "total": 2,
         "ok": 2,
-        "ko": 17
+        "ko": 11
     },
     "percentiles2": {
         "total": 3,
         "ok": 3,
-        "ko": 22
+        "ko": 17
     },
     "percentiles3": {
         "total": 4,
         "ok": 4,
-        "ko": 26
+        "ko": 21
     },
     "percentiles4": {
         "total": 7,
         "ok": 7,
-        "ko": 27
+        "ko": 22
     },
     "group1": {
     "name": "t < 800 ms",
