@@ -45,4 +45,4 @@ jobs:
       uses: mshick/add-pr-comment@v2
         with:
           message: |
-            Test 01 result: [https://${{ github.repository_owner }}.github.io/${{ env.GH_REPO }}/${{ env.GATLING_OUTPUT_FOLDER }}](https://${{ github.repository_owner }}.github.io/${{ env.GH_REPO }}/${{ env.GATLING_OUTPUT_FOLDER }})
+            Test 01 result: [https://${{ github.repository_owner }}.github.io/${{ env.GH_REPO }}/${{ env.GATLING_OUTPUT_FOLDER }}](https://${{ github.repository_owner }}.github.io/${{ env.GH_REPO }}/${{ env.GATLING_OUTPUT_FOLDER }}) 🌏          
