@@ -18,6 +18,11 @@ services:
     depends_on:
       - postgres
     network_mode: host
+    deploy:
+      resources:
+        limits:
+          cpus: '0.3'
+          memory: '80MB'
   api02:
     <<: *api
     hostname: api02
@@ -40,6 +45,11 @@ services:
       - api01
       - api02
     network_mode: host
+    deploy:
+      resources:
+        limits:
+          cpus: '0.4'
+          memory: '134MB'
     # deploy:
     #   resources:
     #     limits:
@@ -80,11 +90,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    # deploy:
-    #   resources:
-    #     limits:
-    #       cpus: '0.5'
-    #       memory: '256MB'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '256MB'
 
   # portainer:
   #   image: portainer/portainer-ce:latest
