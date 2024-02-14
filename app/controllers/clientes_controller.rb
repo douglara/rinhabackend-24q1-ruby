@@ -8,7 +8,7 @@ class ClientesController < ApplicationController
 
   def build_extrato
     data_extrato = Time.current.iso8601(6)
-    last_transactions = Transaction.where.not(kind: 0).where(customer_id: params[:id]).order(created_at: :desc).limit(10).pluck(:amount,:kind,:description,:created_at)
+    last_transactions = Transaction.where.not(kind: 0).where(customer_id: params[:id]).order(id: :desc).limit(10).pluck(:amount,:kind,:description,:created_at)
     last_transactions = last_transactions.map do | transaction |
       {
         valor: transaction[0],
@@ -78,7 +78,7 @@ class ClientesController < ApplicationController
   end
 
   def load_customer
-    @customer = Transaction.where(customer_id: params[:id]).order(id: :desc).limit(1).first
+    @customer = Transaction.where(customer_id: params[:id]).order(id: :desc).limit(1).select(:customer_balance_cents, :customer_limit_cents).first
   end
 
   def validate_customer
