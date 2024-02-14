@@ -6,13 +6,15 @@ services:
     hostname: api01
     environment:
       - WEB_CONCURRENCY=2
-      - RAILS_MAX_THREADS=30
+      - RAILS_MAX_THREADS=20
       - RUBY_YJIT_ENABLE=1
       - DATABASE_URL=postgres://postgres:password@localhost/
       - SECRET_KEY_BASE=dummy
       - PORT=8081
       - DISABLE_DATABASE_ENVIRONMENT_CHECK=1
       - STARTUP_DELAY=5
+      - RAILS_ENV=production
+      - RAILS_LOG_TO_STDOUT=false
     depends_on:
       - postgres
     network_mode: host
@@ -21,13 +23,15 @@ services:
     hostname: api02
     environment:
       - WEB_CONCURRENCY=2
-      - RAILS_MAX_THREADS=30
+      - RAILS_MAX_THREADS=20
       - RUBY_YJIT_ENABLE=1
       - DATABASE_URL=postgres://postgres:password@localhost/
       - SECRET_KEY_BASE=dummy
       - PORT=8082
       - DISABLE_DATABASE_ENVIRONMENT_CHECK=1
       - STARTUP_DELAY=10
+      - RAILS_ENV=production
+      - RAILS_LOG_TO_STDOUT=false
   nginx:
     image: nginx:1.25.3-alpine
     volumes:
@@ -42,9 +46,33 @@ services:
     #       cpus: "0.17"
     #       memory: "10MB"
 
+  redis:
+    image: 'redis:6.2.7-alpine'
+    network_mode: host
+    ports:
+      - '6379:6379'
+
+  # envoy:
+  #   image: envoyproxy/envoy:v1.29-latest
+  #   container_name: rinhaproxy
+  #   volumes:
+  #     - ./envoy.yaml:/etc/envoy/envoy.yaml:ro
+  #   # depends_on:
+  #   #   - api01
+  #   #   - api02
+  #   ports:
+  #     - "9999:9999"
+  #   network_mode: host
+  #   # deploy:
+  #   #   resources:
+  #   #     limits:
+  #   #       cpus: '0.4'
+  #   #       memory: '134MB'
+
+
   postgres:
     image: postgres:16-alpine
-    command: 'postgres -c max_connections=1000 -c shared_buffers=128MB -c synchronous_commit=off -c fsync=off -c full_page_writes=off'
+    command: 'postgres -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=1000 -c shared_buffers=128MB -c synchronous_commit=off -c fsync=off -c full_page_writes=off'
     # command: postgres -c config_file=/etc/postgresql/postgresql.conf
     environment:
       - POSTGRES_PASSWORD=password
@@ -64,8 +92,22 @@ services:
     #       cpus: '0.5'
     #       memory: '256MB'
 
-  portainer:
-    image: portainer/portainer-ce:latest
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+  # portainer:
+  #   image: portainer/portainer-ce:latest
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   network_mode: host
+
+  pgadmin:
+    image: dpage/pgadmin4:8.3
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@email.com"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+      PGADMIN_LISTEN_PORT: 5050
     network_mode: host
+    volumes:
+      - rinha-24-q1-pgadmin:/var/lib/pgadmin
+
+volumes:
+  rinha-24-q1-pgadmin:
+      external: false
